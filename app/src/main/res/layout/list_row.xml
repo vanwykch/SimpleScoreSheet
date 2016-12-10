@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="?android:attr/listPreferredItemHeight"
+
+    android:padding="6dip">
+    
+   <TextView
+       android:id="@+id/nametext"
+       android:layout_width="120dip"
+       android:layout_height="wrap_content"
+       android:layout_gravity="left"
+       android:ellipsize="end"
+       android:textColor="#000000"
+       android:textSize="25sp"
+       />
+   
+   <TextView
+       android:id="@+id/totalscoretext"
+       android:layout_width="80dip"
+       android:layout_height="wrap_content"
+       android:layout_alignParentRight="true"
+       android:layout_alignParentTop="true" 
+       android:layout_centerVertical="true" 
+	   android:textSize="25sp"
+		android:textColor="#000000"
+   />
+   <TextView
+		android:id="@+id/roundscoretext"
+
+		android:layout_width="80dip"
+		android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+		android:textSize="25sp"
+		android:layout_toLeftOf="@id/totalscoretext"
+		android:textColor="#000000"
+		android:focusable="false"
+    />
+   
+</RelativeLayout>    
