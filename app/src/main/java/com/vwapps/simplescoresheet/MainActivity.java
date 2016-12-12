@@ -1,31 +1,28 @@
 package com.vwapps.simplescoresheet;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import android.annotation.SuppressLint;
+import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.NavUtils;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 public class MainActivity extends AppCompatActivity
         implements
         DialogFragmentEnterScore.NoticeDialogListener,
-        DialogFragmentAddPlayer.NoticeDialogListener,
+        DialogFragmentAddPlayer.AddPlayerNoticeDialogListener,
         DialogFragmentNewGame.NoticeDialogListener,
-        CurrentGame.AddRoundListener
-{
+        CurrentGame.AddRoundListener {
 
     //    private AdView adView;
     private RoundCollectionPagerAdapter mRoundCollectionPagerAdapter;
@@ -41,8 +38,12 @@ public class MainActivity extends AppCompatActivity
 
         setContentView(R.layout.main_layout);
 
+        //
+        // rounds pager
+        //
 
-//      LinearLayout layout = (LinearLayout)findViewById(R.id.main_linear_layout);
+        createRoundPagerObjects(false);
+
 
         //
         //  Ad stuff
@@ -54,23 +55,18 @@ public class MainActivity extends AppCompatActivity
 //      String unit_id = "ca-app-pub-4566924390439368/1341963930";
 //      adView = new AdView(this, AdSize.BANNER, unit_id);
 //      adView.loadAd(adReq);
+//      LinearLayout layout = (LinearLayout)findViewById(R.id.main_linear_layout);
 //      layout.addView(adView);
 
-        //
-        // rounds pager
-        //
-
-        createRoundPagerObjects(false);
     }
 
     /**
-     * Create the pager for round dialog fragments
+     * Creates the pager for round dialog fragments
      *
      * interface addRoundListener.createRoundPagerObjects
      * This used to add the round page without first creating a round.
      */
-    public void createRoundPagerObjects(boolean loadingSavedGame)
-    {
+    public void createRoundPagerObjects(boolean loadingSavedGame) {
         // Create an adapter that when requested, will return a fragment representing an object in
         // the collection.
         //
@@ -79,8 +75,7 @@ public class MainActivity extends AppCompatActivity
         mRoundCollectionPagerAdapter = new RoundCollectionPagerAdapter(getSupportFragmentManager());
 
         if (CurrentGame.getTheGame().getNumRounds() == 0
-                && ! loadingSavedGame )
-        {
+                && !loadingSavedGame) {
             mRoundCollectionPagerAdapter.addRoundFragment();
         }
 
@@ -90,10 +85,9 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
-     * Show add player dialog
+     * Shows add player dialog
      */
-    public void showAddPlayer(View view)
-    {
+    public void showAddPlayer(View view) {
         final DialogFragmentAddPlayer apd = new DialogFragmentAddPlayer();
         apd.show(getSupportFragmentManager(), "enter_score_tag");
     }
@@ -102,8 +96,7 @@ public class MainActivity extends AppCompatActivity
 // overrides
 ///////////////////////////////////////////////////////////////////////////////////////////////////
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
         populateAllRoundFragments();
     }
@@ -116,10 +109,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus)
-    {
-        if (hasFocus)
-        {
+    public void onWindowFocusChanged(boolean hasFocus) {
+        if (hasFocus) {
             populateAllRoundFragments();
         }
         super.onWindowFocusChanged(hasFocus);
@@ -134,14 +125,19 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.action_reverse_sort:
 
-                if (CurrentGame.getTheGame().reverseSort())
-                {
-                    Toast.makeText(this, "Sorting low to high", Toast.LENGTH_LONG).show();
+                if (CurrentGame.getTheGame().reverseSort()) {
+                    Toast.makeText(this, R.string.sort_lo_to_hi, Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, R.string.sort_hi_to_lo, Toast.LENGTH_LONG).show();
                 }
-                else
-                {
-                    Toast.makeText(this, "Sorting high to low", Toast.LENGTH_LONG).show();
-                }
+
+                return true;
+            case R.id.add_round:
+
+                int newRound = addRound();
+                Context c = this.getApplicationContext();
+                String toastString = c.getString(R.string.added_round) + " " +  newRound;
+                Toast.makeText(this,  toastString, Toast.LENGTH_LONG).show();
 
                 return true;
             case R.id.action_show_about:
@@ -170,18 +166,6 @@ public class MainActivity extends AppCompatActivity
         }
         return super.onOptionsItemSelected(item);
     }
-    @Override
-    protected void onStart()
-    {
-        super.onStart();  // Always call the superclass method first
-        CurrentGame.getTheGame().restoreCurGame(this);
-    }
-    @Override
-    protected void onStop()
-    {
-        super.onStop();  // Always call the superclass method first
-        CurrentGame.getTheGame().saveCurGame(this);
-    }
 
     @Override
     public void onDestroy() {
@@ -192,36 +176,33 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
 // pop-up dialog callbacks
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-    public void onDialogOkClickAddPlayer(DialogFragment dialog)
-    {
+    public void addPlayerOK(DialogFragment dialog) {
         //TODO use 'dialog' to pass data?
 
-        if (CurrentGame.getTheGame().showNameExists())
-        {
+        if (CurrentGame.getTheGame().showNameExists()) {
             Toast.makeText(this, "Name Exists!", Toast.LENGTH_LONG).show();
             CurrentGame.getTheGame().setDontShowNameExists();
         }
     }
 
-    public void onEnterScoreOkClick(DialogFragment dialog)
-    {
+    /**
+     * DialogFragmentEnterScore
+     */
+    public void enterScoreOK(DialogFragment dialog) {
         CurrentGame curGame = CurrentGame.getTheGame();
-        if (curGame.getNumRounds() == curGame.getCurRoundObject().getRoundNumber())
-        {
+        if (curGame.getNumRounds() == curGame.getCurRoundObject().getRoundNumber()) {
             // This is the last round,
             // so add a new round if all scores are entered.
-            if ( curGame.getCurRoundObject().allScoresEntered())
-            {
-                mRoundCollectionPagerAdapter.addRoundFragment();
+            if (curGame.getCurRoundObject().allScoresEntered()) {
+                addRound();
             }
         }
     }
 
-    public void onNewGameOkClick(DialogFragment dialog)
-    {
+    public void newGameOK(DialogFragment dialog) {
         createRoundPagerObjects(false);
     }
 
@@ -233,91 +214,16 @@ public class MainActivity extends AppCompatActivity
      * interface addRoundListener.addRound  This used to add a round from CurrentGame so that
      * a round fragment gets added to the pager when a round is added.
      */
-    public void addRound()
-    {
+    public int addRound() {
         mRoundCollectionPagerAdapter.addRoundFragment();
+        int roundNumber = CurrentGame.getTheGame().getCurRoundObject().getRoundNumber();
+        mViewPager.setCurrentItem(roundNumber - 1);
+        return roundNumber;
     }
 
-    /**
-     * A FragmentStatePagerAdapter that returns a fragment
-     * representing a round
-     */
-    public static class RoundCollectionPagerAdapter extends FragmentStatePagerAdapter {
 
-        private int mNumRounds = 0;
-
-        @SuppressLint("UseSparseArrays")
-        private Map<Integer,FragmentRound> mFragmentMap = new HashMap<Integer,FragmentRound>();
-        public RoundCollectionPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        public void addRoundFragment()
-        {
-            mNumRounds++;
-            CurrentGame.addRoundToGame();
-            this.notifyDataSetChanged();
-        }
-
-        public void populateAll()
-        {
-            for (Integer key : mFragmentMap.keySet())
-            {
-                mFragmentMap.get(key).populatePlayerList();
-            }
-        }
-
-        @Override
-        public Fragment instantiateItem(ViewGroup container, int position)
-        {
-            Fragment fragment = new FragmentRound();
-            Bundle args = new Bundle();
-            args.putInt(FragmentRound.ARG_OBJECT, position + 1);
-            fragment.setArguments(args);
-
-            // If this round has a fragment in the list,
-            // remove the old one first
-            if (mFragmentMap.get(position) != null)
-            {
-                mFragmentMap.remove(position);
-            }
-            mFragmentMap.put(position,(FragmentRound)fragment);
-
-            super.instantiateItem(container, position);
-
-            return fragment;
-
-        }
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object){
-            mFragmentMap.remove(position);
-            super.destroyItem(container, position,object);
-        }
-
-
-        @Override
-        public Fragment getItem(int position)
-        {
-            mFragmentMap.get(position).populatePlayerList();
-            return mFragmentMap.get(position);
-        }
-
-        @Override
-        public int getCount()
-        {
-            return mNumRounds;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return "Round " + (position + 1);
-        }
-    }
-
-    private void populateAllRoundFragments()
-    {
-        if (mRoundCollectionPagerAdapter != null)
-        {
+    private void populateAllRoundFragments() {
+        if (mRoundCollectionPagerAdapter != null) {
             mRoundCollectionPagerAdapter.populateAll();
         }
     }

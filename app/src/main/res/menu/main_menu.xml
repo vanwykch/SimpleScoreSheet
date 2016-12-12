@@ -11,12 +11,17 @@
         android:title="@string/new_game"/>
 
     <item
-        android:id="@+id/action_show_help"
+        android:id="@+id/add_round"
         android:orderInCategory="3"
+        android:title="@string/add_round"/>
+
+    <item
+        android:id="@+id/action_show_help"
+        android:orderInCategory="4"
         android:title="@string/help"/>
 
     <item
         android:id="@+id/action_show_about"
-        android:orderInCategory="3"
+        android:orderInCategory="5"
         android:title="@string/about"/>
 </menu>

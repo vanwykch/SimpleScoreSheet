@@ -2,12 +2,9 @@ package com.vwapps.simplescoresheet;
 
 import java.util.ArrayList;
 
-import com.vwapps.simplescoresheet.DialogFragmentAddPlayer.NoticeDialogListener;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.support.v4.app.DialogFragment;
 
 /**
  *  Singleton class for the current game being view/modified/etc.
@@ -119,6 +116,13 @@ public class CurrentGame {
     public void addPlayer(String name)  { mPlayers.add(new Player(name));   }
 	
 	public String getCurName()       { return this.mCurPlayer.getName();	}
+    public PlayerStateForRound getCurPlayerStateForRound(){
+        return mCurPlayer.getPlayerStateForRound(mCurRoundNumber);
+    }
+	public Integer getCurPlayerCurRoundScore() {
+        Integer score = getCurRoundObject().getPlayersScore(mCurPlayer);
+        return score;
+    }
 	public Round getCurRoundObject() { return getRoundByNumber(mCurRoundNumber);	}
 	public int getNumRounds()	     { return mRounds.size(); }
     public ArrayList<Player> getPlayerList()  { return mPlayers;  }
@@ -194,7 +198,7 @@ public class CurrentGame {
 	}
 	
     public interface AddRoundListener {
-        public void addRound();
+        public int addRound();
         public void createRoundPagerObjects(boolean loadingSavedGame);
     }
 
@@ -211,7 +215,7 @@ public class CurrentGame {
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(act.toString()
-                    + " must implement NoticeDialogListener");
+                    + " must implement AddPlayerNoticeDialogListener");
         }
 
 	    if (mPlayers.size() == 0)

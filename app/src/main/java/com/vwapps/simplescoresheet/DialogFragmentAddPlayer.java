@@ -20,11 +20,11 @@ public class DialogFragmentAddPlayer extends DialogFragment
     private LinearLayout.LayoutParams mParams;
     private DialogFragmentAddPlayer mDialogFragment = this;
     
-    public interface NoticeDialogListener {
-        public void onDialogOkClickAddPlayer(DialogFragment dialog);
+    public interface AddPlayerNoticeDialogListener {
+        public void addPlayerOK(DialogFragment dialog);
     }
     
-    NoticeDialogListener mListener;
+    AddPlayerNoticeDialogListener mListener;
     
     @Override
     public void onAttach(Activity activity) 
@@ -32,11 +32,11 @@ public class DialogFragmentAddPlayer extends DialogFragment
         super.onAttach(activity);
         // Verify that the host activity implements the callback interface
         try {
-            mListener = (NoticeDialogListener) activity;
+            mListener = (AddPlayerNoticeDialogListener) activity;
         } catch (ClassCastException e) {
             // The activity doesn't implement the interface, throw exception
             throw new ClassCastException(activity.toString()
-                    + " must implement NoticeDialogListener");
+                    + " must implement AddPlayerNoticeDialogListener");
         }
     }
 
@@ -74,7 +74,7 @@ public class DialogFragmentAddPlayer extends DialogFragment
 					// set flag so activity can show toast 
 					// to alert user that name exists
 					curGame.setShowNameExists();
-					mListener.onDialogOkClickAddPlayer(mDialogFragment);
+					mListener.addPlayerOK(mDialogFragment);
 				}
 				else
 				{
@@ -86,7 +86,7 @@ public class DialogFragmentAddPlayer extends DialogFragment
 					{
 						// just don't don't do anything
 					}
-					mListener.onDialogOkClickAddPlayer(mDialogFragment);
+					mListener.addPlayerOK(mDialogFragment);
 					imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
 				}
 			}
