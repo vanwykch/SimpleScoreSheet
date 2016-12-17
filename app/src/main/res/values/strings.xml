@@ -1,0 +1,50 @@
+<resources>
+
+    <string name="app_name">Simple Score Sheet</string>
+    <string name="reverse_sort">Reverse Sort</string>
+    <string name="about">About</string>
+    <string name="help">Help</string>
+    <string name="version">Version:</string>
+    <string name="dev_by">Developed By:</string>
+    <string name="veedub_software">VeedubSoftware</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="round">Round</string>
+    <string name="total">Total</string>
+    <string name="clear_scores">Clear Scores</string>
+    <string name="clear_everything">Clear Names and Scores</string>
+    <string name="new_game">New Game</string>
+    <string name="add_round">Add Round</string>
+    <string name="dialog_new_game">New Game</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    <string name="enter_score">Enter Score</string>
+    <string name="change_score">Change Score</string>
+    <string name="edit_player">Edit Player</string>
+    <string name="sort_hi_to_lo">"Sorting high to low"</string>
+    <string name="sort_lo_to_hi">"Sorting low to high"</string>
+    <string name="added_round">"Added round"</string>
+    <!--
+          <string name="ad_unit_id">ca-app-pub-4566924390439368/1341963930</string>
+    -->
+    <string name="add_player">Add Player</string>
+    <string name="player_name">Player Name</string>
+    <string name="delete_player">Delete Player</string>
+    <string name="help_task_add_player">Add a player</string>
+    <string name="help_how_add_player">Press \"Add a Player\"</string>
+
+    <string name="help_task_enter_score">Enter score</string>
+    <string name="help_how_enter_score">Press on player name</string>
+    <string name="help_task_edit_player">Delete/Edit a player</string>
+    <string name="help_how_edit_player">Long Press on player name</string>
+    <string name="help_task_add_round">Add a round</string>
+    <string name="help_how_add_round">A new round is added when all score are entered for the last round</string>
+    <string name="help_task_next_prev_round">View next/previous round</string>
+    <string name="help_how_swipe" >Swiping left and right changes round</string>
+    <string name="help_task_clear">Clear scores / Clear scores and players</string>
+    <string name="help_how_clear">Press \"New Game\" on pull down menu</string>
+    <string name="help_task_sort">Change player list order to lowest score at the top (or back to high score at the top)</string>
+    <string name="help_how_sort"> Press \"Reverse Sort\" on pull down menu</string>
+    <string name="help_task_save">Save Game"</string>
+    <string name="help_how_save"> The current game is automatically saved, this is the only saving feature</string>
+
+</resources>

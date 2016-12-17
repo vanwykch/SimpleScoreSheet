@@ -21,7 +21,7 @@
     </ViewFlipper>
 
     <View
-        android:id="@+id/totaltextview"
+        android:id="@+id/total_text_view"
         android:layout_width="fill_parent"
         android:layout_height="3dip">
 
