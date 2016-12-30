@@ -16,7 +16,11 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
 import com.google.android.gms.common.api.GoogleApiClient;
-
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.EditText;
 public class MainActivity extends AppCompatActivity
         implements
         DialogFragmentEnterScore.NoticeDialogListener,
@@ -175,7 +179,13 @@ public class MainActivity extends AppCompatActivity
         super.onDestroy();
 
     }
-
+//    public void gameSetup(View view) {
+//        Intent intent = new Intent(this, DisplayMessageActivity.class);
+//        EditText editText = (EditText) findViewById(R.id.edit_message);
+//        String message = editText.getText().toString();
+//        intent.putExtra(EXTRA_MESSAGE, message);
+//        startActivity(intent);
+//    }
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // pop-up dialog callbacks
 ///////////////////////////////////////////////////////////////////////////////////////////////////

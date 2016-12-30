@@ -39,12 +39,13 @@
     <string name="help_task_add_round">Add a round</string>
     <string name="help_how_add_round">A new round is added when all score are entered for the last round</string>
     <string name="help_task_next_prev_round">View next/previous round</string>
-    <string name="help_how_swipe" >Swiping left and right changes round</string>
+    <string name="help_how_swipe">Swiping left and right changes round</string>
     <string name="help_task_clear">Clear scores / Clear scores and players</string>
     <string name="help_how_clear">Press \"New Game\" on pull down menu</string>
     <string name="help_task_sort">Change player list order to lowest score at the top (or back to high score at the top)</string>
     <string name="help_how_sort"> Press \"Reverse Sort\" on pull down menu</string>
     <string name="help_task_save">Save Game"</string>
     <string name="help_how_save"> The current game is automatically saved, this is the only saving feature</string>
+    <string name="title_activity_setup_game">SetupGame</string>
 
 </resources>
